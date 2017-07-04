@@ -37,11 +37,12 @@ def _get_env_cmake_system_name():
 
 class CMake(object):
 
-    def __init__(self, settings_or_conanfile, generator=None, cmake_system_name=True,
+    def __init__(self, settings_or_conanfile, generator=None, toolset=None, cmake_system_name=True,
                  parallel=True):
         """
         :param settings_or_conanfile: Conanfile instance (or settings for retro compatibility)
         :param generator: Generator name to use or none to autodetect
+        :param toolset: Visual Studio toolset to use or none to autodetect
         :param cmake_system_name: False to not use CMAKE_SYSTEM_NAME variable,
                True for auto-detect or directly a string with the system name
         :param parallel: Try to build with multiple cores if available
@@ -62,6 +63,7 @@ class CMake(object):
         self._os = self._settings.get_safe("os")
         self._compiler = self._settings.get_safe("compiler")
         self._compiler_version = self._settings.get_safe("compiler.version")
+        self._compiler_toolset = self._settings.get_safe("compiler.toolset")
         self._arch = self._settings.get_safe("arch")
         self._build_type = self._settings.get_safe("build_type")
         self._op_system_version = self._settings.get_safe("os.version")
@@ -69,6 +71,7 @@ class CMake(object):
         self._runtime = self._settings.get_safe("compiler.runtime")
 
         self.generator = generator or self._generator()
+        self.toolset = toolset or self._toolset()
         self.build_dir = None
         self._cmake_system_name = _get_env_cmake_system_name()
         if self._cmake_system_name is None:  # Not overwritten using environment
@@ -123,6 +126,13 @@ class CMake(object):
             return "MinGW Makefiles"  # it is valid only under Windows
 
         return "Unix Makefiles"
+
+    def _toolset(self):
+        if self._compiler == "Visual Studio":
+            if self._compiler_toolset:
+                return self._compiler_toolset
+
+        return None
 
     def _cmake_compiler_options(self, the_os, arch):
         cmake_definitions = OrderedDict()
@@ -200,11 +210,14 @@ class CMake(object):
 
     @property
     def command_line(self):
-        return _join_arguments([
+        _arguments = [
             '-G "%s"' % self.generator,
             self.flags,
             '-Wno-dev'
-        ])
+        ]
+        if self.toolset:
+            _arguments.append('-T %s' % self.toolset)
+        return _join_arguments(_arguments)
 
     @property
     def build_type(self):
