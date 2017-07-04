@@ -28,7 +28,7 @@ class CMakeTest(unittest.TestCase):
         settings = Settings.loads(default_settings_yml)
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "12"
+        settings.compiler.version = "15"
         settings.arch = "x86"
         conan_file = ConanFileMock()
         conan_file.settings = settings
@@ -47,22 +47,22 @@ class CMakeTest(unittest.TestCase):
                 self.assertEqual(new_text, cmake.command_line)
                 self.assertEqual(build_config, cmake.build_config)
 
-        check('-G "Visual Studio 12 2013" -DCONAN_EXPORTED="1" '
-              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="12" -Wno-dev',
+        check('-G "Visual Studio 15 2017" -DCONAN_EXPORTED="1" '
+              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="15" -Wno-dev',
               "")
 
         check('-G "Custom Generator" -DCONAN_EXPORTED="1" '
-              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="12" -Wno-dev',
+              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="15" -Wno-dev',
               '', generator="Custom Generator")
 
         settings.build_type = "Debug"
-        check('-G "Visual Studio 12 2013" -DCONAN_EXPORTED="1" '
-              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="12" -Wno-dev',
+        check('-G "Visual Studio 15 2017" -DCONAN_EXPORTED="1" '
+              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="15" -Wno-dev',
               '--config Debug')
 
         settings.arch = "x86_64"
-        check('-G "Visual Studio 12 2013 Win64" -DCONAN_EXPORTED="1" '
-              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="12" -Wno-dev',
+        check('-G "Visual Studio 15 2017 Win64" -DCONAN_EXPORTED="1" '
+              '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="15" -Wno-dev',
               '--config Debug')
 
         settings.compiler = "gcc"
@@ -166,7 +166,7 @@ build_type: [ Release]
         conan_file.settings = settings
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "12"
+        settings.compiler.version = "15"
         settings.arch = "x86"
         settings.os = "Windows"
         cmake = CMake(conan_file)
@@ -182,7 +182,7 @@ build_type: [ Release]
         settings = Settings.loads(default_settings_yml)
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "12"
+        settings.compiler.version = "15"
         settings.arch = "x86"
         settings.os = "Windows"
 
@@ -195,8 +195,8 @@ build_type: [ Release]
         cmake = CMake(settings)
         cmake.configure(conan_file)
         cores = '-DCONAN_CXX_FLAGS="/MP{0}" -DCONAN_C_FLAGS="/MP{0}" '.format(tools.cpu_count())
-        self.assertEqual('cd {0} && cmake -G "Visual Studio 12 2013" {1}-DCONAN_EXPORTED="1" '
-                         '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="12" {2}'
+        self.assertEqual('cd {0} && cmake -G "Visual Studio 15 2017" {1}-DCONAN_EXPORTED="1" '
+                         '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="15" {2}'
                          '-Wno-dev {0}'.format(dot_dir, cross, cores),
                          conan_file.command)
 
@@ -209,7 +209,7 @@ build_type: [ Release]
         settings = Settings.loads(default_settings_yml)
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "12"
+        settings.compiler.version = "15"
         settings.compiler.runtime = "MDd"
         settings.arch = "x86"
         settings.build_type = None
@@ -231,8 +231,8 @@ build_type: [ Release]
         cmake.configure()
 
         cores = '-DCONAN_CXX_FLAGS="/MP{0}" -DCONAN_C_FLAGS="/MP{0}" '.format(tools.cpu_count())
-        self.assertEqual('cd {0} && cmake -G "Visual Studio 12 2013" -DCONAN_LINK_RUNTIME="/MDd" {1}-DCONAN_EXPORTED="1"'
-                         ' -DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="12" {2}'
+        self.assertEqual('cd {0} && cmake -G "Visual Studio 15 2017" -DCONAN_LINK_RUNTIME="/MDd" {1}-DCONAN_EXPORTED="1"'
+                         ' -DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="15" {2}'
                          '-Wno-dev {0}'.format(dot_dir, cross, cores),
                          conan_file.command)
 
@@ -257,8 +257,8 @@ build_type: [ Release]
         else:
             escaped_args = "'--foo \"bar\"' -DSHARED=\"True\" '/source'"
 
-        self.assertEqual('cd %s && cmake -G "Visual Studio 12 2013" -DCONAN_LINK_RUNTIME="/MDd" %s-DCONAN_EXPORTED="1" '
-                         '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="12" %s'
+        self.assertEqual('cd %s && cmake -G "Visual Studio 15 2017" -DCONAN_LINK_RUNTIME="/MDd" %s-DCONAN_EXPORTED="1" '
+                         '-DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="15" %s'
                          '-Wno-dev %s' % (tempdir, cross, cores, escaped_args),
                          conan_file.command)
 
@@ -325,7 +325,7 @@ build_type: [ Release]
         settings = Settings.loads(default_settings_yml)
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "12"
+        settings.compiler.version = "15"
         settings.arch = "x86"
         conanfile.settings = settings
 
@@ -353,7 +353,7 @@ build_type: [ Release]
         settings = Settings.loads(default_settings_yml)
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "12"
+        settings.compiler.version = "15"
         settings.arch = "x86"
         settings.os = "Windows"
 

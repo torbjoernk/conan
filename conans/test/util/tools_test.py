@@ -259,7 +259,7 @@ class HelloConan(ConanFile):
         settings = Settings.loads(default_settings_yml)
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "14"
+        settings.compiler.version = "15"
         # test build_type and arch override, for multi-config packages
         cmd = tools.msvc_build_command(settings, "project.sln", build_type="Debug", arch="x86")
         self.assertIn('msbuild project.sln /p:Configuration=Debug /p:Platform="x86"', cmd)
@@ -284,7 +284,7 @@ class HelloConan(ConanFile):
         settings = Settings.loads(default_settings_yml)
         settings.os = "Windows"
         settings.compiler = "Visual Studio"
-        settings.compiler.version = "14"
+        settings.compiler.version = "15"
         cmd = tools.vcvars_command(settings)
         output = TestBufferConanOutput()
         runner = TestRunner(output)
@@ -306,7 +306,7 @@ class HelloConan(ConanFile):
         text = """os: [Windows]
 compiler:
     Visual Studio:
-        version: ["14"]
+        version: ["15"]
         """
         settings = Settings.loads(text)
         settings.os = "Windows"
@@ -314,7 +314,7 @@ compiler:
         with self.assertRaisesRegexp(ConanException,
                                      "compiler.version setting required for vcvars not defined"):
             tools.vcvars_command(settings)
-        settings.compiler.version = "14"
+        settings.compiler.version = "15"
         cmd = tools.vcvars_command(settings)
         self.assertIn("vcvarsall.bat", cmd)
         with tools.environment_append({"VisualStudioVersion": "12"}):
